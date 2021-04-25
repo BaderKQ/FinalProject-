@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class Player_Control : MonoBehaviour
 {
-    public Rigidbody rb;
+    public Rigidbody2D rb;
 
     public float GroundSpeed = 1f;
     public bool CanJump = true;
     public float RaycastDistance = 1f;
+    public float DistanceAdjuster = 1f;
 
-    public bool WallCling = false;
+    public bool LeftWallCling = false;
+    public bool RightWallCling = false;
 
     bool leftInput = false;
     bool rightInput = false;
@@ -21,11 +23,16 @@ public class Player_Control : MonoBehaviour
     bool movingRight = false;
 
     public float JumpForce = 1f;
+    public float WallJumpForce = 1f;
     public float ArtificialGravity = 1f;
+    float currentGravity = 1f;
+
+    bool CollisionCheck = false;
 
     void Start()
     {
-        rb = gameObject.GetComponent<Rigidbody>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
+        currentGravity = ArtificialGravity;
     }
 
     void Update()
@@ -35,7 +42,7 @@ public class Player_Control : MonoBehaviour
         HorizontalMovement();
         if (jumpInput) Jumping();
         //if (fallInput) Falling();
-        if (WallCling) ClimbingWalls();
+        if (LeftWallCling || RightWallCling) ClimbingWalls();
     }
 
     void RegisterInputs()
@@ -44,6 +51,7 @@ public class Player_Control : MonoBehaviour
         rightInput = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
         jumpInput = Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W);
         fallInput = Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S);
+        //if (leftInput || rightInput) CollisionCheck = true;
     }
 
     void DetermineMovement()
@@ -54,22 +62,25 @@ public class Player_Control : MonoBehaviour
 
     void HorizontalMovement()
     {
-        if (movingLeft && !WallDetection(Vector3.left) && !WallCling)
+        if (movingLeft && !WallDetection(Vector2.left, RaycastDistance) && !LeftWallCling && !RightWallCling)
         {
-            if (CanJump) transform.position += new Vector3(-GroundSpeed * Time.deltaTime, 0, 0);
+            if (CanJump) transform.position += new Vector3(-GroundSpeed * Time.deltaTime, 0);
             else transform.position += new Vector3((-GroundSpeed/2) * Time.deltaTime, 0, 0);
+
         }
-        if (movingRight && !WallDetection(Vector3.right) && !WallCling)
+        if (movingRight && !WallDetection(Vector2.right, RaycastDistance) && !LeftWallCling && !RightWallCling)
         {
             if (CanJump) transform.position += new Vector3(GroundSpeed * Time.deltaTime, 0, 0);
             else transform.position += new Vector3((GroundSpeed/2) * Time.deltaTime, 0, 0);
         }
     }
 
-    bool WallDetection(Vector3 direction)
+    bool WallDetection(Vector2 direction, float Distance)
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, direction, out hit, RaycastDistance, 255)) return true;
+        RaycastHit2D hit;
+        hit = Physics2D.Raycast(transform.position, direction, Distance, 255);
+
+        if (hit) return true;
         else return false;
     }
 
@@ -77,10 +88,13 @@ public class Player_Control : MonoBehaviour
     {
         if (CanJump)
         {
-            rb.useGravity = true;
-            WallCling = false;
-            rb.velocity = Vector3.zero;
-            rb.AddForce(0, JumpForce, 0);
+            currentGravity = ArtificialGravity;
+            if (LeftWallCling) rb.AddForce(new Vector2(WallJumpForce, 0));
+            if (RightWallCling) rb.AddForce(new Vector2(-WallJumpForce, 0));
+            LeftWallCling = false;
+            RightWallCling = false;
+            rb.velocity = Vector2.zero;
+            rb.AddForce(new Vector2 (0, JumpForce));
             CanJump = false;
         }
     }
@@ -91,29 +105,63 @@ public class Player_Control : MonoBehaviour
         //{
         //    CanJump = WallDetection(Vector3.down);
         //}
-        if (!WallCling) rb.AddForce(0, -ArtificialGravity, 0);
+        if (!LeftWallCling && !RightWallCling) rb.AddForce(new Vector2 (0, -ArtificialGravity));
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!CanJump && collision.gameObject.CompareTag("Wall"))
+        CheckCollision(collision);
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        CheckCollision(collision);
+        LeftWallCling = false;
+        RightWallCling = false;
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (CollisionCheck == true)
+        {
+            CheckCollision(collision);
+            CollisionCheck = false;
+        }
+    }
+
+    void CheckCollision(Collision2D collision)
+    {
+        var direction = Vector2.zero;
+        //print(direction);
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            direction += contact.point - new Vector2(transform.position.x, transform.position.y);
+        }
+        print(direction);
+
+
+        if (direction.x < -0.8f && leftInput) LeftWallCling = true;
+        if (direction.x > 0.8f && rightInput) RightWallCling = true;
+        if (direction.y > 0.5f || direction.y < -0.5f)
+        {
+            LeftWallCling = false;
+            RightWallCling = false;
+        }
+
+        if (!CanJump && collision.gameObject.CompareTag("Wall") && direction.y < 1)
         {
             CanJump = true;
-        }
-        if (WallDetection(Vector3.left) || WallDetection(Vector3.right))
-        {
-            WallCling = true;
         }
     }
 
     void ClimbingWalls()
     {
-        rb.useGravity = false;
-        rb.velocity = Vector3.zero;
+        currentGravity = 0;
+        rb.velocity = Vector2.zero;
     }
 
     void Falling()
     {
-        rb.AddForce(0, -JumpForce * 2, 0);
+        rb.AddForce(new Vector2 (0, -JumpForce * 2));
     }
 }
