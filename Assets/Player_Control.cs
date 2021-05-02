@@ -6,6 +6,8 @@ public class Player_Control : MonoBehaviour
 {
     public Rigidbody2D rb;
 
+    bool facingRight = true;
+
     public float GroundSpeed = 1f;
     public bool CanJump = true;
     public float RaycastDistance = 1f;
@@ -27,12 +29,19 @@ public class Player_Control : MonoBehaviour
     public float ArtificialGravity = 1f;
     float currentGravity = 1f;
 
+    public GameObject RightAttack;
+    public GameObject LeftAttack;
+
     bool CollisionCheck = false;
 
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         currentGravity = ArtificialGravity;
+        facingRight = true;
+
+        RightAttack.SetActive(false);
+        LeftAttack.SetActive(false);
     }
 
     void Update()
@@ -52,6 +61,8 @@ public class Player_Control : MonoBehaviour
         jumpInput = Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W);
         fallInput = Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S);
         //if (leftInput || rightInput) CollisionCheck = true;
+        if (Input.GetKeyDown(KeyCode.Space)) Attack();
+        
     }
 
     void DetermineMovement()
@@ -64,12 +75,14 @@ public class Player_Control : MonoBehaviour
     {
         if (movingLeft && !WallDetection(Vector2.left, RaycastDistance) && !LeftWallCling && !RightWallCling)
         {
+            facingRight = false;
             if (CanJump) transform.position += new Vector3(-GroundSpeed * Time.deltaTime, 0);
             else transform.position += new Vector3((-GroundSpeed/2) * Time.deltaTime, 0, 0);
 
         }
         if (movingRight && !WallDetection(Vector2.right, RaycastDistance) && !LeftWallCling && !RightWallCling)
         {
+            facingRight = true;
             if (CanJump) transform.position += new Vector3(GroundSpeed * Time.deltaTime, 0, 0);
             else transform.position += new Vector3((GroundSpeed/2) * Time.deltaTime, 0, 0);
         }
@@ -89,8 +102,16 @@ public class Player_Control : MonoBehaviour
         if (CanJump)
         {
             currentGravity = ArtificialGravity;
-            if (LeftWallCling) rb.AddForce(new Vector2(WallJumpForce, 0));
-            if (RightWallCling) rb.AddForce(new Vector2(-WallJumpForce, 0));
+            if (LeftWallCling)
+            {
+                rb.AddForce(new Vector2(WallJumpForce, 0));
+                facingRight = true;
+            }
+            if (RightWallCling)
+            {
+                rb.AddForce(new Vector2(-WallJumpForce, 0));
+                facingRight = false;
+            }
             LeftWallCling = false;
             RightWallCling = false;
             rb.velocity = Vector2.zero;
@@ -163,5 +184,16 @@ public class Player_Control : MonoBehaviour
     void Falling()
     {
         rb.AddForce(new Vector2 (0, -JumpForce * 2));
+    }
+
+    void Attack()
+    {
+        if (facingRight) RightAttack.SetActive(true);
+        else LeftAttack.SetActive(true);
+    }
+
+    public void ResetJump()
+    {
+        CanJump = true;
     }
 }
