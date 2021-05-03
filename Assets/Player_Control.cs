@@ -34,6 +34,21 @@ public class Player_Control : MonoBehaviour
 
     bool CollisionCheck = false;
 
+    //Animations
+    public GameObject StandRight;
+    public GameObject WalkRight;
+    public GameObject AttackRight;
+    public GameObject JumpRight;
+    public GameObject JumpAttackRight;
+    public GameObject ClingRight;
+    public GameObject StandLeft;
+    public GameObject WalkLeft;
+    public GameObject AttackLeft;
+    public GameObject JumpLeft;
+    public GameObject JumpAttackLeft;
+    public GameObject ClingLeft;
+
+
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -52,6 +67,7 @@ public class Player_Control : MonoBehaviour
         if (jumpInput) Jumping();
         //if (fallInput) Falling();
         if (LeftWallCling || RightWallCling) ClimbingWalls();
+        PlayAnimation();
     }
 
     void RegisterInputs()
