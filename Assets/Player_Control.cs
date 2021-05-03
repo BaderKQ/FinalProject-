@@ -212,4 +212,9 @@ public class Player_Control : MonoBehaviour
     {
         CanJump = true;
     }
+
+    public void PlayAnimation()
+    {
+
+    }
 }
