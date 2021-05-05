@@ -35,18 +35,24 @@ public class Player_Control : MonoBehaviour
     bool CollisionCheck = false;
 
     //Animations
-    public GameObject StandRight;
-    public GameObject WalkRight;
-    public GameObject AttackRight;
-    public GameObject JumpRight;
-    public GameObject JumpAttackRight;
-    public GameObject ClingRight;
-    public GameObject StandLeft;
-    public GameObject WalkLeft;
-    public GameObject AttackLeft;
-    public GameObject JumpLeft;
-    public GameObject JumpAttackLeft;
-    public GameObject ClingLeft;
+    public int SetAnimaion = 0;
+    public GameObject StandRight; //1
+    public GameObject WalkRight; //2
+    public GameObject JumpRight; //3
+    public GameObject ClingRight; //4
+    public GameObject StandLeft; //5
+    public GameObject WalkLeft; //6
+    public GameObject JumpLeft; //7
+    public GameObject ClingLeft; //8
+
+
+    public GameObject AttackRight; //9
+    public GameObject JumpAttackRight; //10
+    public GameObject AttackLeft; //11
+    public GameObject JumpAttackLeft; //12
+
+    bool isMoving = false;
+    bool isJumping = false;
 
 
     void Start()
@@ -67,6 +73,7 @@ public class Player_Control : MonoBehaviour
         if (jumpInput) Jumping();
         //if (fallInput) Falling();
         if (LeftWallCling || RightWallCling) ClimbingWalls();
+        SetAnimations();
         PlayAnimation();
     }
 
@@ -92,16 +99,19 @@ public class Player_Control : MonoBehaviour
         if (movingLeft && !WallDetection(Vector2.left, RaycastDistance) && !LeftWallCling && !RightWallCling)
         {
             facingRight = false;
+            isMoving = true;
             if (CanJump) transform.position += new Vector3(-GroundSpeed * Time.deltaTime, 0);
-            else transform.position += new Vector3((-GroundSpeed/2) * Time.deltaTime, 0, 0);
+            else transform.position += new Vector3((-GroundSpeed / 2) * Time.deltaTime, 0, 0);
 
         }
-        if (movingRight && !WallDetection(Vector2.right, RaycastDistance) && !LeftWallCling && !RightWallCling)
+        else if (movingRight && !WallDetection(Vector2.right, RaycastDistance) && !LeftWallCling && !RightWallCling)
         {
             facingRight = true;
+            isMoving = true;
             if (CanJump) transform.position += new Vector3(GroundSpeed * Time.deltaTime, 0, 0);
-            else transform.position += new Vector3((GroundSpeed/2) * Time.deltaTime, 0, 0);
+            else transform.position += new Vector3((GroundSpeed / 2) * Time.deltaTime, 0, 0);
         }
+        else isMoving = false;
     }
 
     bool WallDetection(Vector2 direction, float Distance)
@@ -117,6 +127,7 @@ public class Player_Control : MonoBehaviour
     {
         if (CanJump)
         {
+            isJumping = true;
             currentGravity = ArtificialGravity;
             if (LeftWallCling)
             {
@@ -188,6 +199,7 @@ public class Player_Control : MonoBehaviour
         if (!CanJump && collision.gameObject.CompareTag("Wall") && direction.y < 1)
         {
             CanJump = true;
+            isJumping = false;
         }
     }
 
@@ -213,8 +225,120 @@ public class Player_Control : MonoBehaviour
         CanJump = true;
     }
 
+    public void SetAnimations()
+    {
+        if (RightWallCling) SetAnimaion = 4;
+        else if (LeftWallCling) SetAnimaion = 8;
+        else if (facingRight && isJumping) SetAnimaion = 3;
+        else if (!facingRight && isJumping) SetAnimaion = 7;
+        else if (facingRight && isMoving && !isJumping) SetAnimaion = 2;
+        else if (!facingRight && isMoving && !isJumping) SetAnimaion = 6;
+        else if (facingRight && !isMoving && !isJumping) SetAnimaion = 1;
+        else if (!facingRight && !isMoving && !isJumping) SetAnimaion = 5;
+    }
+
     public void PlayAnimation()
     {
+        switch (SetAnimaion)
+        {
+            case 8:
+                StandRight.SetActive(false);
+                StandLeft.SetActive(false);
+                WalkRight.SetActive(false);
+                WalkLeft.SetActive(false);
+                JumpRight.SetActive(false);
+                JumpLeft.SetActive(false);
+                ClingRight.SetActive(false);
+                ClingLeft.SetActive(true);
 
+                break;
+            case 7:
+                StandRight.SetActive(false);
+                StandLeft.SetActive(false);
+                WalkRight.SetActive(false);
+                WalkLeft.SetActive(false);
+                JumpRight.SetActive(false);
+                JumpLeft.SetActive(true);
+                ClingRight.SetActive(false);
+                ClingLeft.SetActive(false);
+
+                break;
+            case 6:
+                StandRight.SetActive(false);
+                StandLeft.SetActive(false);
+                WalkRight.SetActive(false);
+                WalkLeft.SetActive(true);
+                JumpRight.SetActive(false);
+                JumpLeft.SetActive(false);
+                ClingRight.SetActive(false);
+                ClingLeft.SetActive(false);
+
+                break;
+            case 5:
+                StandRight.SetActive(false);
+                StandLeft.SetActive(true);
+                WalkRight.SetActive(false);
+                WalkLeft.SetActive(false);
+                JumpRight.SetActive(false);
+                JumpLeft.SetActive(false);
+                ClingRight.SetActive(false);
+                ClingLeft.SetActive(false);
+
+                break;
+            case 4:
+                StandRight.SetActive(false);
+                StandLeft.SetActive(false);
+                WalkRight.SetActive(false);
+                WalkLeft.SetActive(false);
+                JumpRight.SetActive(false);
+                JumpLeft.SetActive(false);
+                ClingRight.SetActive(true);
+                ClingLeft.SetActive(false);
+
+                break;
+            case 3:
+                StandRight.SetActive(false);
+                StandLeft.SetActive(false);
+                WalkRight.SetActive(false);
+                WalkLeft.SetActive(false);
+                JumpRight.SetActive(true);
+                JumpLeft.SetActive(false);
+                ClingRight.SetActive(false);
+                ClingLeft.SetActive(false);
+
+                break;
+            case 2:
+                StandRight.SetActive(false);
+                StandLeft.SetActive(false);
+                WalkRight.SetActive(true);
+                WalkLeft.SetActive(false);
+                JumpRight.SetActive(false);
+                JumpLeft.SetActive(false);
+                ClingRight.SetActive(false);
+                ClingLeft.SetActive(false);
+
+                break;
+            case 1:
+                StandRight.SetActive(true);
+                StandLeft.SetActive(false);
+                WalkRight.SetActive(false);
+                WalkLeft.SetActive(false);
+                JumpRight.SetActive(false);
+                JumpLeft.SetActive(false);
+                ClingRight.SetActive(false);
+                ClingLeft.SetActive(false);
+
+                break;
+            default:
+                StandRight.SetActive(true);
+                StandLeft.SetActive(false);
+                WalkRight.SetActive(false);
+                WalkLeft.SetActive(false);
+                JumpRight.SetActive(false);
+                JumpLeft.SetActive(false);
+                ClingRight.SetActive(false);
+                ClingLeft.SetActive(false);
+                break;
+        }
     }
 }
