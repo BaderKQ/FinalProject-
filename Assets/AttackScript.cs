@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class AttackScript : MonoBehaviour
 {
-    public float AttackTimer = 1f;
+    float AttackTimer = 1f;
     float AttackTimeLeft = 1f;
     public GameObject Player;
+
+    void Awake()
+    {
+        AttackTimer = Player.GetComponent<Player_Control>().AttackTimer;
+        AttackTimeLeft = AttackTimer;
+    }
 
 
     void Update()

@@ -31,6 +31,9 @@ public class Player_Control : MonoBehaviour
 
     public GameObject RightAttack;
     public GameObject LeftAttack;
+    public float AttackTimer = 1f;
+    float AttackTimeLeft = 1f;
+    public bool CanAttack = true;
 
     bool CollisionCheck = false;
 
@@ -70,9 +73,14 @@ public class Player_Control : MonoBehaviour
         RegisterInputs();
         DetermineMovement();
         HorizontalMovement();
+
         if (jumpInput) Jumping();
         //if (fallInput) Falling();
         if (LeftWallCling || RightWallCling) ClimbingWalls();
+
+        AttackTimeLeft -= Time.deltaTime;
+        if (AttackTimeLeft <= 0) CanAttack = true;
+
         SetAnimations();
         PlayAnimation();
     }
@@ -216,7 +224,9 @@ public class Player_Control : MonoBehaviour
 
     void Attack()
     {
-        if (facingRight) RightAttack.SetActive(true);
+        AttackTimeLeft = AttackTimer;
+        CanAttack = false;
+        if (facingRight)RightAttack.SetActive(true);
         else LeftAttack.SetActive(true);
     }
 
@@ -229,6 +239,10 @@ public class Player_Control : MonoBehaviour
     {
         if (RightWallCling) SetAnimaion = 4;
         else if (LeftWallCling) SetAnimaion = 8;
+        else if (facingRight && !CanAttack && !isJumping) SetAnimaion = 9;
+        else if (!facingRight && !CanAttack && !isJumping) SetAnimaion = 11;
+        else if (facingRight && !CanAttack && isJumping) SetAnimaion = 10;
+        else if (!facingRight && !CanAttack && isJumping) SetAnimaion = 12;
         else if (facingRight && isJumping) SetAnimaion = 3;
         else if (!facingRight && isJumping) SetAnimaion = 7;
         else if (facingRight && isMoving && !isJumping) SetAnimaion = 2;
@@ -241,6 +255,62 @@ public class Player_Control : MonoBehaviour
     {
         switch (SetAnimaion)
         {
+            case 12:
+                StandRight.SetActive(false);
+                StandLeft.SetActive(false);
+                WalkRight.SetActive(false);
+                WalkLeft.SetActive(false);
+                JumpRight.SetActive(false);
+                JumpLeft.SetActive(false);
+                ClingRight.SetActive(false);
+                ClingLeft.SetActive(false);
+                AttackRight.SetActive(false);
+                AttackLeft.SetActive(false);
+                JumpAttackRight.SetActive(false);
+                JumpAttackLeft.SetActive(true);
+                break;
+            case 11:
+                StandRight.SetActive(false);
+                StandLeft.SetActive(false);
+                WalkRight.SetActive(false);
+                WalkLeft.SetActive(false);
+                JumpRight.SetActive(false);
+                JumpLeft.SetActive(false);
+                ClingRight.SetActive(false);
+                ClingLeft.SetActive(false);
+                AttackRight.SetActive(false);
+                AttackLeft.SetActive(true);
+                JumpAttackRight.SetActive(false);
+                JumpAttackLeft.SetActive(false);
+                break;
+            case 10:
+                StandRight.SetActive(false);
+                StandLeft.SetActive(false);
+                WalkRight.SetActive(false);
+                WalkLeft.SetActive(false);
+                JumpRight.SetActive(false);
+                JumpLeft.SetActive(false);
+                ClingRight.SetActive(false);
+                ClingLeft.SetActive(false);
+                AttackRight.SetActive(false);
+                AttackLeft.SetActive(false);
+                JumpAttackRight.SetActive(true);
+                JumpAttackLeft.SetActive(false);
+                break;
+            case 9:
+                StandRight.SetActive(false);
+                StandLeft.SetActive(false);
+                WalkRight.SetActive(false);
+                WalkLeft.SetActive(false);
+                JumpRight.SetActive(false);
+                JumpLeft.SetActive(false);
+                ClingRight.SetActive(false);
+                ClingLeft.SetActive(false);
+                AttackRight.SetActive(true);
+                AttackLeft.SetActive(false);
+                JumpAttackRight.SetActive(false);
+                JumpAttackLeft.SetActive(false);
+                break;
             case 8:
                 StandRight.SetActive(false);
                 StandLeft.SetActive(false);
@@ -250,7 +320,10 @@ public class Player_Control : MonoBehaviour
                 JumpLeft.SetActive(false);
                 ClingRight.SetActive(false);
                 ClingLeft.SetActive(true);
-
+                AttackRight.SetActive(false);
+                AttackLeft.SetActive(false);
+                JumpAttackRight.SetActive(false);
+                JumpAttackLeft.SetActive(false);
                 break;
             case 7:
                 StandRight.SetActive(false);
@@ -261,7 +334,10 @@ public class Player_Control : MonoBehaviour
                 JumpLeft.SetActive(true);
                 ClingRight.SetActive(false);
                 ClingLeft.SetActive(false);
-
+                AttackRight.SetActive(false);
+                AttackLeft.SetActive(false);
+                JumpAttackRight.SetActive(false);
+                JumpAttackLeft.SetActive(false);
                 break;
             case 6:
                 StandRight.SetActive(false);
@@ -272,7 +348,10 @@ public class Player_Control : MonoBehaviour
                 JumpLeft.SetActive(false);
                 ClingRight.SetActive(false);
                 ClingLeft.SetActive(false);
-
+                AttackRight.SetActive(false);
+                AttackLeft.SetActive(false);
+                JumpAttackRight.SetActive(false);
+                JumpAttackLeft.SetActive(false);
                 break;
             case 5:
                 StandRight.SetActive(false);
@@ -283,7 +362,10 @@ public class Player_Control : MonoBehaviour
                 JumpLeft.SetActive(false);
                 ClingRight.SetActive(false);
                 ClingLeft.SetActive(false);
-
+                AttackRight.SetActive(false);
+                AttackLeft.SetActive(false);
+                JumpAttackRight.SetActive(false);
+                JumpAttackLeft.SetActive(false);
                 break;
             case 4:
                 StandRight.SetActive(false);
@@ -294,7 +376,10 @@ public class Player_Control : MonoBehaviour
                 JumpLeft.SetActive(false);
                 ClingRight.SetActive(true);
                 ClingLeft.SetActive(false);
-
+                AttackRight.SetActive(false);
+                AttackLeft.SetActive(false);
+                JumpAttackRight.SetActive(false);
+                JumpAttackLeft.SetActive(false);
                 break;
             case 3:
                 StandRight.SetActive(false);
@@ -305,7 +390,10 @@ public class Player_Control : MonoBehaviour
                 JumpLeft.SetActive(false);
                 ClingRight.SetActive(false);
                 ClingLeft.SetActive(false);
-
+                AttackRight.SetActive(false);
+                AttackLeft.SetActive(false);
+                JumpAttackRight.SetActive(false);
+                JumpAttackLeft.SetActive(false);
                 break;
             case 2:
                 StandRight.SetActive(false);
@@ -316,7 +404,10 @@ public class Player_Control : MonoBehaviour
                 JumpLeft.SetActive(false);
                 ClingRight.SetActive(false);
                 ClingLeft.SetActive(false);
-
+                AttackRight.SetActive(false);
+                AttackLeft.SetActive(false);
+                JumpAttackRight.SetActive(false);
+                JumpAttackLeft.SetActive(false);
                 break;
             case 1:
                 StandRight.SetActive(true);
@@ -327,7 +418,10 @@ public class Player_Control : MonoBehaviour
                 JumpLeft.SetActive(false);
                 ClingRight.SetActive(false);
                 ClingLeft.SetActive(false);
-
+                AttackRight.SetActive(false);
+                AttackLeft.SetActive(false);
+                JumpAttackRight.SetActive(false);
+                JumpAttackLeft.SetActive(false);
                 break;
             default:
                 StandRight.SetActive(true);
@@ -338,6 +432,10 @@ public class Player_Control : MonoBehaviour
                 JumpLeft.SetActive(false);
                 ClingRight.SetActive(false);
                 ClingLeft.SetActive(false);
+                AttackRight.SetActive(false);
+                AttackLeft.SetActive(false);
+                JumpAttackRight.SetActive(false);
+                JumpAttackLeft.SetActive(false);
                 break;
         }
     }
