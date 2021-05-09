@@ -8,6 +8,9 @@ public class Player_Control : MonoBehaviour
 
     bool facingRight = true;
 
+    public int MaxPlayerHealth = 5;
+    public int PlayerHealthLeft = 5;
+
     public float GroundSpeed = 1f;
     public bool CanJump = true;
     public float RaycastDistance = 1f;
@@ -25,6 +28,8 @@ public class Player_Control : MonoBehaviour
     bool movingRight = false;
 
     public float JumpForce = 1f;
+    public float MaxJumpTime = 0.01f;
+    public float JumpTimer = 0.01f;
     public float WallJumpForce = 1f;
     public float ArtificialGravity = 1f;
     float currentGravity = 1f;
@@ -63,6 +68,8 @@ public class Player_Control : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         currentGravity = ArtificialGravity;
         facingRight = true;
+        JumpTimer = 0;
+        PlayerHealthLeft = MaxPlayerHealth;
 
         RightAttack.SetActive(false);
         LeftAttack.SetActive(false);
@@ -74,12 +81,14 @@ public class Player_Control : MonoBehaviour
         DetermineMovement();
         HorizontalMovement();
 
-        if (jumpInput) Jumping();
+        if (jumpInput && JumpTimer <= 0) Jumping();
         //if (fallInput) Falling();
         if (LeftWallCling || RightWallCling) ClimbingWalls();
 
         AttackTimeLeft -= Time.deltaTime;
         if (AttackTimeLeft <= 0) CanAttack = true;
+
+        JumpTimer -= Time.deltaTime;
 
         SetAnimations();
         PlayAnimation();
@@ -151,8 +160,8 @@ public class Player_Control : MonoBehaviour
             RightWallCling = false;
             rb.velocity = Vector2.zero;
             rb.AddForce(new Vector2 (0, JumpForce));
-            CanJump = false;
         }
+        CanJump = false;
     }
 
     void FixedUpdate()
@@ -171,7 +180,7 @@ public class Player_Control : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D collision)
     {
-        CheckCollision(collision);
+        //CheckCollision(collision);
         LeftWallCling = false;
         RightWallCling = false;
     }
@@ -204,10 +213,12 @@ public class Player_Control : MonoBehaviour
             RightWallCling = false;
         }
 
-        if (!CanJump && collision.gameObject.CompareTag("Wall") && direction.y < 1)
+        if (!CanJump && collision.gameObject.CompareTag("Wall") && direction.y < 1 && JumpTimer <= 0)
         {
+            print(collision.gameObject.name);
             CanJump = true;
             isJumping = false;
+            JumpTimer = MaxJumpTime;
         }
     }
 
@@ -234,6 +245,24 @@ public class Player_Control : MonoBehaviour
     {
         CanJump = true;
     }
+
+    public void PlayerGetsHurt()
+    {
+        PlayerHealthLeft -= 1;
+        if (PlayerHealthLeft <= 0)
+        {
+            //Player Dies
+            Destroy(gameObject);
+        }
+    }
+
+
+
+
+
+
+
+
 
     public void SetAnimations()
     {
