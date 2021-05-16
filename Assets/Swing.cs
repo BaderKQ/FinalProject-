@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SwingingPlatform : MonoBehaviour
+public class Swing : MonoBehaviour
 {
     public float speed = 1.0f;
     public float maxRotation = 30.0f;
