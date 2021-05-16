@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class Player_Control : MonoBehaviour
 {
@@ -65,11 +67,13 @@ public class Player_Control : MonoBehaviour
 
     void Start()
     {
+
         rb = gameObject.GetComponent<Rigidbody2D>();
         currentGravity = ArtificialGravity;
         facingRight = true;
         JumpTimer = 0;
         PlayerHealthLeft = MaxPlayerHealth;
+        UpdateDisplay();
 
         RightAttack.SetActive(false);
         LeftAttack.SetActive(false);
@@ -249,14 +253,29 @@ public class Player_Control : MonoBehaviour
     public void PlayerGetsHurt()
     {
         PlayerHealthLeft -= 1;
+        UpdateDisplay();
         if (PlayerHealthLeft <= 0)
         {
-            //Player Dies
-            Destroy(gameObject);
+            PlayerDies();
         }
     }
 
+    void PlayerDies()
+    {
+        PlayerSpawnController.Instance.PlayerDied();
+        gameObject.SetActive(false);
+    }
 
+    public Text HealthDisplay;
+    public void UpdateDisplay()
+    {
+        HealthDisplay.text = "HP: " + PlayerHealthLeft;
+    }
+
+    public void Respawn()
+    {
+        PlayerHealthLeft = MaxPlayerHealth;
+    }
 
 
 

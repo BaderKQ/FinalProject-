@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 1430943709755380374}
   - component: {fileID: -1177441494731770759}
   - component: {fileID: -4188931186259221437}
+  - component: {fileID: 5350210312877947495}
   m_Layer: 0
   m_Name: BulletPrefab
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -133,3 +134,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ac9d0bd17c2d7a49b18154aa612395f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5350210312877947495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6234259565891766603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 878999330ae38446394dfc77f47a3e7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHP: 1
+  CurrentHP: 1

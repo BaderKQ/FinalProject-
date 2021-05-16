@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Projectile
   - PlayerStrike
+  - Hazard
   layers:
   - Default
   - TransparentFX

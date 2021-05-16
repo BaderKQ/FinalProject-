@@ -26,5 +26,18 @@ public class EnemyHurt : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+
+        if (collision.CompareTag("Player") && this.gameObject.CompareTag("Projectile"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && this.gameObject.CompareTag("Projectile"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
