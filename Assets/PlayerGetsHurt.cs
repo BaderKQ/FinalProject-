@@ -18,7 +18,7 @@ public class PlayerGetsHurt : MonoBehaviour
         if (collision.CompareTag("Enemy") || collision.CompareTag("Projectile") || collision.CompareTag("Patrolling Enemy") || collision.CompareTag("Hazard"))
         {
             Player.SendMessage("PlayerGetsHurt");
-            if (collision.CompareTag("Hazard")) Player.SendMessage("PlayerGetsHurt");
+            if (collision.CompareTag("Hazard") && Player != null) Player.SendMessage("PlayerGetsHurt");
             if (Player.transform.position.x < collision.gameObject.transform.position.x) rb.AddForce(new Vector2(-Knockback, Knockback));
             else if (Player.transform.position.x > collision.gameObject.transform.position.x) rb.AddForce(new Vector2(Knockback, Knockback));
             else rb.AddForce(new Vector2(0, Knockback));

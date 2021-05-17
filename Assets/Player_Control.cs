@@ -269,7 +269,7 @@ public class Player_Control : MonoBehaviour
     public Text HealthDisplay;
     public void UpdateDisplay()
     {
-        HealthDisplay.text = "HP: " + PlayerHealthLeft;
+        if (HealthDisplay != null) HealthDisplay.text = "HP: " + PlayerHealthLeft;
     }
 
     public void Respawn()
