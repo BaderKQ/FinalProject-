@@ -27,7 +27,15 @@ public class AttackScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
+        if (collision.CompareTag("Enemy") || collision.CompareTag("Lantern") || collision.CompareTag("Breakable Wall"))
+        {
+            Player.SendMessage("ResetJump");
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Lantern") || collision.gameObject.CompareTag("Breakable Wall"))
         {
             Player.SendMessage("ResetJump");
         }

@@ -10,8 +10,8 @@ public class Player_Control : MonoBehaviour
 
     bool facingRight = true;
 
-    public int MaxPlayerHealth = 5;
-    public int PlayerHealthLeft = 5;
+    public int MaxPlayerHealth = 6;
+    public int PlayerHealthLeft = 6;
 
     public float GroundSpeed = 1f;
     public bool CanJump = true;
@@ -94,6 +94,7 @@ public class Player_Control : MonoBehaviour
         RegisterInputs();
         DetermineMovement();
         HorizontalMovement();
+        HealthDisplay.text = "HP: " + PlayerHealthLeft;
 
         if (jumpInput && JumpTimer <= 0) Jumping();
         //if (fallInput) Falling();
@@ -191,9 +192,20 @@ public class Player_Control : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         CheckCollision(collision);
+
     }
 
-    void OnCollisionExit2D(Collision2D collision)
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "HealthBoost")
+        {
+            PlayerHealthLeft += 1;
+            Destroy(other.gameObject);
+        }
+    }
+
+void OnCollisionExit2D(Collision2D collision)
     {
         //CheckCollision(collision);
         LeftWallCling = false;
@@ -220,8 +232,8 @@ public class Player_Control : MonoBehaviour
         print(direction);
 
 
-        if (direction.x < -0.8f && leftInput) LeftWallCling = true;
-        if (direction.x > 0.8f && rightInput) RightWallCling = true;
+        //if (direction.x < -0.8f && leftInput) LeftWallCling = true;
+        //if (direction.x > 0.8f && rightInput) RightWallCling = true;
         if (direction.y > 0.5f || direction.y < -0.5f)
         {
             LeftWallCling = false;
@@ -262,15 +274,17 @@ public class Player_Control : MonoBehaviour
         CanJump = true;
     }
 
-    public void PlayerGetsHurt()
+    public void PlayerGetsHurt(int type)
     {
+
         tick.PlayOneShot(hit, 0.7F);
         PlayerHealthLeft -= 1;
+
+        print(type);
+        if (CanAttack && type == 1) PlayerHealthLeft -= 1;
+        else if (CanAttack && type == 2) PlayerHealthLeft = 0;
         UpdateDisplay();
-        if (PlayerHealthLeft <= 0)
-        {
-            PlayerDies();
-        }
+        if (PlayerHealthLeft <= 0) PlayerDies();
     }
 
     void PlayerDies()
