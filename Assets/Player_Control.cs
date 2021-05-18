@@ -10,8 +10,8 @@ public class Player_Control : MonoBehaviour
 
     bool facingRight = true;
 
-    public int MaxPlayerHealth = 5;
-    public int PlayerHealthLeft = 5;
+    public int MaxPlayerHealth = 6;
+    public int PlayerHealthLeft = 6;
 
     public float GroundSpeed = 1f;
     public bool CanJump = true;
