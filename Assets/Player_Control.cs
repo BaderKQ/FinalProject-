@@ -221,8 +221,8 @@ void OnCollisionExit2D(Collision2D collision)
         print(direction);
 
 
-        if (direction.x < -0.8f && leftInput) LeftWallCling = true;
-        if (direction.x > 0.8f && rightInput) RightWallCling = true;
+        //if (direction.x < -0.8f && leftInput) LeftWallCling = true;
+        //if (direction.x > 0.8f && rightInput) RightWallCling = true;
         if (direction.y > 0.5f || direction.y < -0.5f)
         {
             LeftWallCling = false;
@@ -262,14 +262,12 @@ void OnCollisionExit2D(Collision2D collision)
         CanJump = true;
     }
 
-    public void PlayerGetsHurt()
+    public void PlayerGetsHurt(int type)
     {
-        PlayerHealthLeft -= 1;
+        if (!CanAttack && type == 1) PlayerHealthLeft -= 1;
+        else PlayerHealthLeft = 0;
         UpdateDisplay();
-        if (PlayerHealthLeft <= 0)
-        {
-            PlayerDies();
-        }
+        if (PlayerHealthLeft <= 0) PlayerDies();
     }
 
     void PlayerDies()

@@ -17,7 +17,8 @@ public class PlayerGetsHurt : MonoBehaviour
     {
         if (collision.CompareTag("Enemy") || collision.CompareTag("Projectile") || collision.CompareTag("Patrolling Enemy") || collision.CompareTag("Hazard"))
         {
-            Player.SendMessage("PlayerGetsHurt");
+            if (collision.CompareTag("Hazard")) Player.SendMessage("PlayerGetsHurt", 2);
+            else Player.SendMessage("PlayerGetsHurt", 1);
             if (collision.CompareTag("Hazard") && Player != null) Player.SendMessage("PlayerGetsHurt");
             if (Player.transform.position.x < collision.gameObject.transform.position.x) rb.AddForce(new Vector2(-Knockback, Knockback));
             else if (Player.transform.position.x > collision.gameObject.transform.position.x) rb.AddForce(new Vector2(Knockback, Knockback));
@@ -29,7 +30,8 @@ public class PlayerGetsHurt : MonoBehaviour
     {
         if (collision2D.gameObject.CompareTag("Enemy") || collision2D.gameObject.CompareTag("Projectile")|| collision2D.gameObject.CompareTag("Patrolling Enemy") || collision2D.gameObject.CompareTag("Hazard"))
         {
-            Player.SendMessage("PlayerGetsHurt");
+            if (collision2D.gameObject.CompareTag("Hazard")) Player.SendMessage("PlayerGetsHurt", 2);
+            else Player.SendMessage("PlayerGetsHurt", 1);
             if (collision2D.gameObject.CompareTag("Hazard")) Player.SendMessage("PlayerGetsHurt");
             if (Player.transform.position.x < collision2D.gameObject.transform.position.x) rb.AddForce(new Vector2(-Knockback, Knockback));
             else if (Player.transform.position.x > collision2D.gameObject.transform.position.x) rb.AddForce(new Vector2(Knockback, Knockback));
