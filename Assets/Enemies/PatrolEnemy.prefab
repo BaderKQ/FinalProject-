@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7574487280983988003}
   - component: {fileID: 8163116642632943632}
   - component: {fileID: 2580699043556753946}
+  - component: {fileID: 6574524035207005963}
   m_Layer: 0
   m_Name: PatrolEnemy
   m_TagString: Patrolling Enemy
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 7015f0dd6ca687d4a973824909fa56af, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -83,7 +84,7 @@ SpriteRenderer:
   m_Size: {x: 0.62, y: 0.99}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!50 &8570978880249730626
@@ -162,6 +163,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHP: 1
   CurrentHP: 1
+--- !u!95 &6574524035207005963
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2544474562372602708}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5fb56019aebf33646b10c6f78c04d805, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &1273285717099390787
 PrefabInstance:
   m_ObjectHideFlags: 0
