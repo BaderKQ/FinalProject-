@@ -221,8 +221,8 @@ void OnCollisionExit2D(Collision2D collision)
         print(direction);
 
 
-        if (direction.x < -0.8f && leftInput) LeftWallCling = true;
-        if (direction.x > 0.8f && rightInput) RightWallCling = true;
+        //if (direction.x < -0.8f && leftInput) LeftWallCling = true;
+        //if (direction.x > 0.8f && rightInput) RightWallCling = true;
         if (direction.y > 0.5f || direction.y < -0.5f)
         {
             LeftWallCling = false;

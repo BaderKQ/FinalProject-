@@ -45,7 +45,7 @@ void Update()
         {
             if (InvincibilityTimeLeft <= 0)
             {
-                //Player.SendMessage("PlayerGetsHurt");
+                Player.SendMessage("PlayerGetsHurt");
                 InvincibilityTimeLeft = MaxInvincibilityTimer;
                 if (collision2D.gameObject.CompareTag("Hazard")) Player.SendMessage("PlayerGetsHurt");
                 if (Player.transform.position.x < collision2D.gameObject.transform.position.x) rb.AddForce(new Vector2(-Knockback, Knockback));
