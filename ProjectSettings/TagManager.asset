@@ -12,6 +12,7 @@ TagManager:
   - Hazard
   - Lantern
   - Breakable Wall
+  - HealthBoost
   layers:
   - Default
   - TransparentFX

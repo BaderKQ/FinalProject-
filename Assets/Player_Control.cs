@@ -84,6 +84,7 @@ public class Player_Control : MonoBehaviour
         RegisterInputs();
         DetermineMovement();
         HorizontalMovement();
+        HealthDisplay.text = "HP: " + PlayerHealthLeft;
 
         if (jumpInput && JumpTimer <= 0) Jumping();
         //if (fallInput) Falling();
@@ -180,9 +181,20 @@ public class Player_Control : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         CheckCollision(collision);
+
     }
 
-    void OnCollisionExit2D(Collision2D collision)
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "HealthBoost")
+        {
+            PlayerHealthLeft += 1;
+            Destroy(other.gameObject);
+        }
+    }
+
+void OnCollisionExit2D(Collision2D collision)
     {
         //CheckCollision(collision);
         LeftWallCling = false;
@@ -269,7 +281,7 @@ public class Player_Control : MonoBehaviour
     public Text HealthDisplay;
     public void UpdateDisplay()
     {
-        if (HealthDisplay != null) HealthDisplay.text = "HP: " + PlayerHealthLeft;
+        HealthDisplay.text = "HP: " + PlayerHealthLeft;
     }
 
     public void Respawn()
