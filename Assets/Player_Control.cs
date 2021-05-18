@@ -264,8 +264,9 @@ void OnCollisionExit2D(Collision2D collision)
 
     public void PlayerGetsHurt(int type)
     {
+        print(type);
         if (!CanAttack && type == 1) PlayerHealthLeft -= 1;
-        else PlayerHealthLeft = 0;
+        else if (!CanAttack && type == 2) PlayerHealthLeft = 0;
         UpdateDisplay();
         if (PlayerHealthLeft <= 0) PlayerDies();
     }
