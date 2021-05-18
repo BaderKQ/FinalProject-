@@ -61,6 +61,15 @@ public class Player_Control : MonoBehaviour
     public GameObject AttackLeft; //11
     public GameObject JumpAttackLeft; //12
 
+
+    public AudioSource tick; 
+    public AudioClip jump;
+    public AudioClip swing; 
+    public AudioClip hit; 
+    public AudioClip death;
+
+    
+
     bool isMoving = false;
     bool isJumping = false;
 
@@ -69,6 +78,7 @@ public class Player_Control : MonoBehaviour
     {
 
         rb = gameObject.GetComponent<Rigidbody2D>();
+        tick = gameObject.GetComponent<AudioSource>();
         currentGravity = ArtificialGravity;
         facingRight = true;
         JumpTimer = 0;
@@ -148,6 +158,7 @@ public class Player_Control : MonoBehaviour
     {
         if (CanJump)
         {
+            tick.PlayOneShot(jump, 0.7F);
             isJumping = true;
             currentGravity = ArtificialGravity;
             if (LeftWallCling)
@@ -239,6 +250,7 @@ public class Player_Control : MonoBehaviour
 
     void Attack()
     {
+        tick.PlayOneShot(swing, 0.7F);
         AttackTimeLeft = AttackTimer;
         CanAttack = false;
         if (facingRight)RightAttack.SetActive(true);
@@ -252,6 +264,7 @@ public class Player_Control : MonoBehaviour
 
     public void PlayerGetsHurt()
     {
+        tick.PlayOneShot(hit, 0.7F);
         PlayerHealthLeft -= 1;
         UpdateDisplay();
         if (PlayerHealthLeft <= 0)
@@ -262,6 +275,7 @@ public class Player_Control : MonoBehaviour
 
     void PlayerDies()
     {
+        tick.PlayOneShot(death, 0.7F);
         PlayerSpawnController.Instance.PlayerDied();
         gameObject.SetActive(false);
     }
