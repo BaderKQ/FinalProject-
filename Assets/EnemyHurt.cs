@@ -16,7 +16,10 @@ public class EnemyHurt : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        print("Blah");
+        if (collision.CompareTag("Player") && this.gameObject.CompareTag("Projectile"))
+        {
+            Destroy(gameObject);
+        }
         if (collision.CompareTag("PlayerStrike"))
         {
             print("THE Blah");
@@ -25,11 +28,6 @@ public class EnemyHurt : MonoBehaviour
             {
                 Destroy(gameObject);
             }
-        }
-
-        if (collision.CompareTag("Player") && this.gameObject.CompareTag("Projectile"))
-        {
-            Destroy(gameObject);
         }
     }
 
