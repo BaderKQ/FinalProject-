@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7547097395370434634}
   - component: {fileID: 1175923038734558555}
   m_Layer: 0
-  m_Name: PatrolEnemy 1
+  m_Name: PatrolAnim
   m_TagString: Patrolling Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107,7 +107,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &2481814415628006771
 BoxCollider2D:
   m_ObjectHideFlags: 0

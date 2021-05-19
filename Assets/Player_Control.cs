@@ -67,8 +67,9 @@ public class Player_Control : MonoBehaviour
     public AudioClip swing; 
     public AudioClip hit; 
     public AudioClip death;
+    public AudioSource healthBoost;
 
-    
+
 
     bool isMoving = false;
     bool isJumping = false;
@@ -201,6 +202,7 @@ public class Player_Control : MonoBehaviour
         if (other.gameObject.tag == "HealthBoost")
         {
             PlayerHealthLeft += 1;
+            healthBoost.Play();
             Destroy(other.gameObject);
         }
     }
